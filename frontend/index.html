@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>SENTINEL-X Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0d1117; color: #c9d1d9; padding: 20px; }
+    h1 { color: #58a6ff; }
+    canvas { background: #161b22; border-radius: 8px; margin-bottom: 20px; }
+    pre { background: #161b22; padding: 10px; border-radius: 8px; max-height: 200px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <h1>🛰️ SENTINEL-X — Supervision</h1>
+  <canvas id="tempChart" width="800" height="300"></canvas>
+  <canvas id="gazChart" width="800" height="300"></canvas>
+  <h2>Alertes</h2>
+  <pre id="alerts"></pre>
+  <script>
+    const ws = new WebSocket("ws://localhost:3000");
+    const tempData = [], gazData = [], labels = [];
+    const tempChart = new Chart(document.getElementById("tempChart"), {
+      type: "line",
+      data: { labels, datasets: [{ label: "Température (°C)", data: tempData, borderColor: "red", tension: 0.3 }] }
+    });
+    const gazChart = new Chart(document.getElementById("gazChart"), {
+      type: "line",
+      data: { labels, datasets: [{ label: "Gaz (ppm)", data: gazData, borderColor: "orange", tension: 0.3 }] }
+    });
+    ws.onmessage = (event) => {
+      const d = JSON.parse(event.data);
+      labels.push(new Date(d.timestamp).toLocaleTimeString());
+      tempData.push(d.temperature);
+      gazData.push(d.gaz);
+      if (labels.length > 20) { labels.shift(); tempData.shift(); gazData.shift(); }
+      tempChart.update(); gazChart.update();
+      if (d.temperature > 40 || d.gaz > 500 || d.presence === 1) {
+        document.getElementById("alerts").textContent += `⚠️ ALERTE: ${JSON.stringify(d)}\n`;
+      }
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "sentinelx-backend",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mqtt": "^5.7.0",
+    "ws": "^8.17.0",
+    "cors": "^2.8.5"
+  }
+}

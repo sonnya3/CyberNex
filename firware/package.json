@@ -1,0 +1,7 @@
+{
+  "name": "sentinelx-firmware-sim",
+  "version": "1.0.0",
+  "main": "simulator.js",
+  "scripts": { "start": "node simulator.js" },
+  "dependencies": { "mqtt": "^5.7.0" }
+}
