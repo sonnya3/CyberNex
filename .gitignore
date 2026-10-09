@@ -30,3 +30,5 @@ ia/known_faces/*.png
 ia/known_faces/*.jpg
 ia/known_faces/*.jpeg
 ia/known_faces/*.png
+infra/certs/*.key
+infra/certs/*.srl

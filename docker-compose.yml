@@ -6,8 +6,10 @@ services:
     container_name: sentinelx-mosquitto
     ports:
       - "5555:1883"
+      - "8883:8883"
     volumes:
       - ./infra/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./infra/certs:/mosquitto/certs
     restart: unless-stopped
 
   backend:
